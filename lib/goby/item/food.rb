@@ -20,13 +20,12 @@ module Goby
     # @param [Entity] user the one using the food.
     # @param [Entity] entity the one on whom the food is used.
     def use(user, entity)
-      if entity.stats[:hp] + recovers > entity.stats[:max_hp]
-        this_recover = entity.stats[:max_hp] - entity.stats[:hp]
-        heal_entity(entity, entity.stats[:max_hp])
+      if heal_takes_entity_over_max_hp(entity)
+        recover_amount = entity.stats[:max_hp] - entity.stats[:hp]
+        entity.set_stats(hp: entity.stats[:max_hp])
       else
-        current_hp = entity.stats[:hp]
-        this_recover = @recovers
-        heal_entity(entity, current_hp + this_recover)
+        recover_amount = @recovers
+        entity.set_stats(hp: (entity.stats[:hp] + @recovers))
       end
 
       # Helpful output.
@@ -36,21 +35,18 @@ module Goby
       else
         print " on #{entity.name}!\n#{entity.name} "
       end
-      print "recovers #{this_recover} HP!\n\n"
+      print "recovers #{recover_amount} HP!\n\n"
       print "#{entity.name}'s HP: #{entity.stats[:hp]}/#{entity.stats[:max_hp]}\n\n"
 
     end
 
     # The amount of HP that the food recovers.
     attr_reader :recovers
-
     private
 
-      #sets the hp of entity to new_hp
-      def heal_entity(entity, new_hp)
-        entity.set_stats(hp: new_hp)
-      end
-
+    def heal_takes_entity_over_max_hp(entity)
+      entity.stats[:hp] + recovers > entity.stats[:max_hp]
+    end
   end
 
 end
