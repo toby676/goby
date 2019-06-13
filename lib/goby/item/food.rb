@@ -19,10 +19,10 @@ module Goby
     def use(food_giver, food_consumer)
       if heal_takes_entity_over_max_hp(food_consumer)
         recovery_amount = food_consumer.stats[:max_hp] - food_consumer.stats[:hp]
-        food_consumer.set_stats(hp: food_consumer.stats[:max_hp])
+        food_consumer.heal_by(recovery_amount)
       else
         recovery_amount = @recovers
-        food_consumer.set_stats(hp: (food_consumer.stats[:hp] + @recovers))
+        food_consumer.heal_by(recovery_amount)
       end
 
       # Helpful output.

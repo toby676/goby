@@ -240,6 +240,10 @@ module Goby
       @stats = constructed_stats
     end
 
+    def heal_by(amount)
+      set_stats(hp: stats[:hp] + amount)
+    end
+
     # getter for stats
     #
     # @return [Object]
