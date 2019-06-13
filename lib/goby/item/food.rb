@@ -16,27 +16,24 @@ module Goby
     end
 
     # Heals the entity.
-    #
-    # @param [Entity] user the one using the food.
-    # @param [Entity] entity the one on whom the food is used.
-    def use(user, entity)
-      if heal_takes_entity_over_max_hp(entity)
-        recover_amount = entity.stats[:max_hp] - entity.stats[:hp]
-        entity.set_stats(hp: entity.stats[:max_hp])
+    def use(food_giver, food_consumer)
+      if heal_takes_entity_over_max_hp(food_consumer)
+        recovery_amount = food_consumer.stats[:max_hp] - food_consumer.stats[:hp]
+        food_consumer.set_stats(hp: food_consumer.stats[:max_hp])
       else
-        recover_amount = @recovers
-        entity.set_stats(hp: (entity.stats[:hp] + @recovers))
+        recovery_amount = @recovers
+        food_consumer.set_stats(hp: (food_consumer.stats[:hp] + @recovers))
       end
 
       # Helpful output.
-      print "#{user.name} uses #{name}"
-      if (user == entity)
+      print "#{food_giver.name} uses #{name}"
+      if (food_giver == food_consumer)
         print " and "
       else
-        print " on #{entity.name}!\n#{entity.name} "
+        print " on #{food_consumer.name}!\n#{food_consumer.name} "
       end
-      print "recovers #{recover_amount} HP!\n\n"
-      print "#{entity.name}'s HP: #{entity.stats[:hp]}/#{entity.stats[:max_hp]}\n\n"
+      print "recovers #{recovery_amount} HP!\n\n"
+      print "#{food_consumer.name}'s HP: #{food_consumer.stats[:hp]}/#{food_consumer.stats[:max_hp]}\n\n"
 
     end
 
