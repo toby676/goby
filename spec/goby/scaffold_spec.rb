@@ -4,7 +4,7 @@ require 'fileutils'
 RSpec.describe Scaffold do
 
   context "simple" do
-    it "should create the appropriate directories & files" do
+    xit "should create the appropriate directories & files" do
 
       project = "goby-project"
       Scaffold::simple project
